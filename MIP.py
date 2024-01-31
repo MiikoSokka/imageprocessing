@@ -7,7 +7,7 @@ import sys
 import tifffile as tiff
 
 def read_tif(file, read_path):
-    img_array = tiff.imread(os.path.join(read_path, file), is_ome=False) # originally I had "multifile=False" argument, but it generated an error)
+    img_array = tiff.imread(os.path.join(read_path, file), is_ome=False) # originally I also had "multifile=False" argument, but it generated an error)
     return img_array
 
 
@@ -32,8 +32,8 @@ def mip_tif(img_array, channelnumber):
 
     elif len(shape) == 4:
         for channel in range(shape[1]):
-            # Perform Maximum Intensity Projection along the Z-axis; does result in duplicate dimension - need to be corrected somehow
-            mip_image = np.amax(img_array, axis=0)
+            # Perform Maximum Intensity Projection along the Z-axis
+            mip_image = np.amax(img_array[:, channel, :, :], axis=0)
             mip_img_array.append(mip_image)
            
     elif len(shape) == 5:
