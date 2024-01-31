@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+''' Generates maximum intensity projection file of a Z stacked tiff file.
+'''
+
 import argparse
 import os
 import numpy as np
