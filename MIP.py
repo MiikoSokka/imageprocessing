@@ -54,9 +54,23 @@ def mip_tif(img_array, channelnumber):
     return mip_img_array
 
 
+def normalize_slices(array_3d):
+
+    shape = array_3d.shape
+    normalized_array = np.zeros_like(array_3d)
+    
+    for c in range(shape[0]):
+        arr = array_3d[c, :, :]
+        array_norm = (arr - arr.min()) / (arr.max() - arr.min()) * 255
+                    
+        normalized_array[c, :, :] = array_norm.astype(np.uint8)
+    
+    return normalized_array
+
         
 
 def save_tif(img_array, file, output_folder, suffix):
+    img_array = img_array.astype(np.uint8)
 
     # Create the output folder if it doesn't exist
     if not os.path.exists(output_folder):
@@ -104,4 +118,5 @@ if __name__ == "__main__":
     # Create the MIP stack and save
     img_array = read_tif(file, read_path)
     mip_img_array = mip_tif(img_array, channelnumber)
-    save_tif(mip_img_array, file, output_folder, suffix)
+    mip_img_array_normalized = normalize_slices(mip_img_array)
+    save_tif(mip_img_array_normalized, file, output_folder, suffix)
